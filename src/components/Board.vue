@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table id="board-table">
     <tr v-for="(board_number,board_number_index) in board_numbers" :key="board_number" >
       <th>{{ board_number }}</th>
       <td v-for="(letter, letter_index) in alphabet" :key="letter_index">
@@ -7,8 +7,8 @@
         </BoardField>
       </td>
     </tr>
-    <td v-for="letter_in_header in headers_alphabet" :key="letter_in_header">
-      <th>{{ letter_in_header }}</th>
+    <td v-for="letter_in_header in headers_alphabet" :key="letter_in_header" >
+      <p class="board-header">{{ letter_in_header }}</p>
     </td>
   </table>
 </template>
@@ -34,8 +34,6 @@ export default {
       if (this.$store.state.gameIsOver === false){
         return 'blank'
       }
-      this.$store.commit('gameIsOver')
-      this.$store.commit('gameIsNotOver')
     },
   },
 
@@ -46,5 +44,14 @@ export default {
 </script>
 
 <style scoped>
-
+#board-table{
+  width: 900px;
+  height: 900px;
+}
+.board-header{
+  width: 100%;
+  font-weight: bold;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
 </style>

@@ -3,20 +3,17 @@
   </button>
 </template>
 <script>
+
 export default {
-  name: "BoardField",
-  props: {
-    horizontally_index: Number,
-    perpendicularly_index: Number,
-    name: String,
-    state: String,
-    player: Number,
-  },
-  computed: {
-    getBoardState(){
-      return this.$store.state.board_fields
-    },
-  },
+  // watch:{
+  //   state:{
+  //     deep: true,
+  //     handler(value) {
+  //       alert(value)
+  //
+  //     }
+  //   }
+  // },
   methods: {
     changeColor(){
       if (this.player === 1){
@@ -25,16 +22,17 @@ export default {
       if (this.player === 2){
         this.state = 'player_two'
       }
-      this.storeState()
-      this.checkForWin()
+      setTimeout(()=>{
+        this.storeState()
+        this.checkForWin()
+      }, 1);
     },
-    storeState(){
-        this.$store.commit('setBoardFieldToPlayer', {
-          horizontal: this.horizontally_index,
-          perpendicularly: this.perpendicularly_index,
-          state: this.state
-        })
-
+    storeState() {
+      this.$store.commit('setBoardFieldToPlayer', {
+        horizontal: this.horizontally_index,
+        perpendicularly: this.perpendicularly_index,
+        state: this.state
+      })
     },
     checkForWin(){
       let filled = true;
@@ -58,6 +56,7 @@ export default {
                 this.checkUprightWin(board,p,h)
             ) {
               this.announceWinner(board[p][h]);
+              return;
             }
           }
         }
@@ -71,14 +70,20 @@ export default {
         if (winner === "player_one") {
           window.alert(winner + " wins");
         }
-        if (winner === "player_one") {
+
+        if (winner === "player_two") {
           window.alert(winner + " wins");
         }
         if (winner === "board_filled") {
           window.alert("Board filled");
         }
-        this.$store.commit('clearBoard')
+        // if(window.confirm(winner + " wins")){
         this.$store.commit('gameIsOver')
+        this.$store.commit('clearBoard')
+        // }
+
+        // this.$store.commit('gameIsNotOver')
+
       }
     },
     disable(){
@@ -140,13 +145,31 @@ export default {
           board[p + 2][h - 2] === board[p + 3][h - 3] &&
           board[p + 3][h - 3] === board[p + 4][h - 4];
     }
-  }
+  },
+  name: "BoardField",
+  props: {
+    horizontally_index: Number,
+    perpendicularly_index: Number,
+    name: String,
+    state: String,
+    player: Number,
+  },
+  computed: {
+    getBoardState(){
+      return this.$store.state.board_fields
+    },
+  },
+  // updated() {
+  //   this.storeState()
+  //   this.checkForWin()
+  // }
 }
 </script>
 
 <style scoped>
   button {
-    height: 20px;
+    height: 50px;
+    width: 50px;
     background: aliceblue;
   }
   .is_black{
